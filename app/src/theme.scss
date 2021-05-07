@@ -1,0 +1,194 @@
+body {
+  background: #f5f5f5;
+
+  --color-primary-h: 216;
+  --color-primary-s: 100%;
+  --color-primary-l: 50%;
+  --color-primary-a: 1;
+  --color-on-primary: #fff;
+
+  --color-secondary-h: 166;
+  --color-secondary-s: 100%;
+  --color-secondary-l: 40%;
+  --color-secondary-a: 1;
+  --color-on-secondary: #fff;
+
+  --color-info-h: 270;
+  --color-info-s: 100%;
+  --color-info-l: 50%;
+  --color-info-a: 1;
+  --color-on-info: #fff;
+
+  --color-success-h: 115;
+  --color-success-s: 57%;
+  --color-success-l: 51%;
+  --color-success-a: 1;
+  --color-on-success: #fff;
+
+  --color-warning-h: 44;
+  --color-warning-s: 100%;
+  --color-warning-l: 50%;
+  --color-warning-a: 1;
+  --color-on-warning: #fff;
+
+  --color-error-h: 355;
+  --color-error-s: 100%;
+  --color-error-l: 64%;
+  --color-error-a: 1;
+  --color-on-error: #fff;
+
+  --color-disabled-h: 0;
+  --color-disabled-s: 0%;
+  --color-disabled-l: 83%;
+  --color-disabled-a: 1;
+  --color-on-disabled: #a3a3a3;
+
+  --color-primary-light: hsla(
+    var(--color-primary-h),
+    var(--color-primary-s),
+    calc(var(--color-primary-l) + 5%),
+    var(--color-primary-a)
+  );
+
+  --color-primary-normal: hsla(
+    var(--color-primary-h),
+    var(--color-primary-s),
+    var(--color-primary-l),
+    var(--color-primary-a)
+  );
+
+  --color-primary-dark: hsla(
+    var(--color-primary-h),
+    var(--color-primary-s),
+    calc(var(--color-primary-l) - 5%),
+    var(--color-primary-a)
+  );
+
+  --color-secondary-light: hsla(
+    var(--color-secondary-h),
+    var(--color-secondary-s),
+    calc(var(--color-secondary-l) + 5%),
+    var(--color-secondary-a)
+  );
+
+  --color-secondary-normal: hsla(
+    var(--color-secondary-h),
+    var(--color-secondary-s),
+    var(--color-secondary-l),
+    var(--color-secondary-a)
+  );
+
+  --color-secondary-dark: hsla(
+    var(--color-secondary-h),
+    var(--color-secondary-s),
+    calc(var(--color-secondary-l) - 5%),
+    var(--color-secondary-a)
+  );
+
+  --color-info-light: hsla(
+    var(--color-info-h),
+    var(--color-info-s),
+    calc(var(--color-info-l) + 5%),
+    var(--color-info-a)
+  );
+
+  --color-info-normal: hsla(var(--color-info-h), var(--color-info-s), var(--color-info-l), var(--color-info-a));
+
+  --color-info-dark: hsla(
+    var(--color-info-h),
+    var(--color-info-s),
+    calc(var(--color-info-l) - 5%),
+    var(--color-info-a)
+  );
+
+  --color-success-light: hsla(
+    var(--color-success-h),
+    var(--color-success-s),
+    calc(var(--color-success-l) + 5%),
+    var(--color-success-a)
+  );
+
+  --color-success-normal: hsla(
+    var(--color-success-h),
+    var(--color-success-s),
+    var(--color-success-l),
+    var(--color-success-a)
+  );
+
+  --color-success-dark: hsla(
+    var(--color-success-h),
+    var(--color-success-s),
+    calc(var(--color-success-l) - 5%),
+    var(--color-success-a)
+  );
+
+  --color-warning-light: hsla(
+    var(--color-warning-h),
+    var(--color-warning-s),
+    calc(var(--color-warning-l) + 5%),
+    var(--color-warning-a)
+  );
+
+  --color-warning-normal: hsla(
+    var(--color-warning-h),
+    var(--color-warning-s),
+    var(--color-warning-l),
+    var(--color-warning-a)
+  );
+
+  --color-warning-dark: hsla(
+    var(--color-warning-h),
+    var(--color-warning-s),
+    calc(var(--color-warning-l) - 5%),
+    var(--color-warning-a)
+  );
+
+  --color-error-light: hsla(
+    var(--color-error-h),
+    var(--color-error-s),
+    calc(var(--color-error-l) + 5%),
+    var(--color-error-a)
+  );
+
+  --color-error-normal: hsla(var(--color-error-h), var(--color-error-s), var(--color-error-l), var(--color-error-a));
+
+  --color-error-dark: hsla(
+    var(--color-error-h),
+    var(--color-error-s),
+    calc(var(--color-error-l) - 5%),
+    var(--color-error-a)
+  );
+
+  --color-disabled-normal: hsla(
+    var(--color-disabled-h),
+    var(--color-disabled-s),
+    var(--color-disabled-l),
+    var(--color-disabled-a)
+  );
+
+  --button-border-radius: 12px;
+
+  --color-foreground: #ffffff;
+
+  --input-border-radius: 12px;
+  --input-label-color: inherit;
+  --input-background-color: #e5e5e5;
+
+  // --flassCard-background-color: red !important;
+
+  font-family: 'Poppins', sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background: #000;
+    color: #ffffff;
+
+    --color-foreground: #1a1a1a;
+
+    --input-background-color: #666;
+
+    font-family: 'Poppins', sans-serif;
+    --color-primary-1: #999;
+  }
+}

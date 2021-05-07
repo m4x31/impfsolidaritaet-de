@@ -1,0 +1,52 @@
+image: docker:19.03.13
+
+variables:
+  ADMIN_FRONTEND_IMAGE_NAME: "admin-frontend"
+  ADMIN_FRONTEND_DEPLOYMENT: "deployment/admin-frontend"
+  DOCKER_HOST: tcp://docker:2376
+  DOCKER_TLS_CERTDIR: "/certs"
+  DOCKER_TLS_VERIFY: 1
+  DOCKER_CERT_PATH: "$DOCKER_TLS_CERTDIR/client"
+
+services:
+  - docker:19.03.13-dind
+
+stages:
+  - build-staging
+  - deploy-staging
+  - build-and-publish-libs
+
+build-admin-frontend-staging:
+  stage: build-staging
+  script:
+    - |
+      for i in $(seq 1 30)
+      do
+          docker info && break
+          echo "Waiting for docker to start"
+          sleep 1s
+      done
+    - docker login $DOCKER_REGISTRY -u nologin -p $SCW_SECRET_TOKEN
+    - docker build -t $DOCKER_REGISTRY/staging/$ADMIN_FRONTEND_IMAGE_NAME:$CI_COMMIT_SHORT_SHA -t $DOCKER_REGISTRY/staging/$ADMIN_FRONTEND_IMAGE_NAME:latest -f Dockerfile.staging .
+    - docker push $DOCKER_REGISTRY/staging/$ADMIN_FRONTEND_IMAGE_NAME:$CI_COMMIT_SHORT_SHA
+    - docker push $DOCKER_REGISTRY/staging/$ADMIN_FRONTEND_IMAGE_NAME:latest
+
+deploy-admin-frontend-staging:
+  image:
+    name: bitnami/kubectl
+    entrypoint: [""]
+  stage: deploy-staging
+  tags:
+    - docker
+  environment: kubernetes
+  dependencies:
+    - build-admin-frontend-staging
+  script:
+    - kubectl set image $ADMIN_FRONTEND_DEPLOYMENT admin-frontend=$DOCKER_REGISTRY/staging/$ADMIN_FRONTEND_IMAGE_NAME:$CI_COMMIT_SHORT_SHA --record -n cc-staging
+
+# build-open-id-auth-lib:
+#   stage: build-and-publish-libs
+#   image: 14.16.1-alpine3.10
+#   when: manual
+#   script:
+#     - ./build.sh
