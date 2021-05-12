@@ -4,13 +4,25 @@ import './i18n';
 import './style.scss';
 import reportWebVitals from './reportWebVitals';
 import Routes from './pages/Routes';
+import { createMuiTheme, ThemeProvider } from '@material-ui/core';
 
-(window as any).React1 = React;
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: '#2F6690',
+    },
+    secondary: {
+      main: '#F46036',
+    },
+  },
+});
 
 ReactDOM.render(
-  <React.StrictMode>
-    <Routes />
-  </React.StrictMode>,
+  <ThemeProvider theme={theme}>
+    <React.StrictMode>
+      <Routes />
+    </React.StrictMode>
+  </ThemeProvider>,
   document.getElementById('root')
 );
 

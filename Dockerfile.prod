@@ -1,0 +1,24 @@
+FROM node:14-alpine as builder
+
+COPY ./app/package.json /app/package.json
+COPY ./app/package-lock.json /app/package-lock.json
+
+WORKDIR /app
+
+RUN npm install
+
+COPY ./app /app
+
+ENV NODE_ENV production
+ENV REACT_APP_STAGE prod
+
+RUN npm run build -- --mode prod
+
+FROM httpd:2.4
+WORKDIR /usr/local/apache2/htdocs/
+COPY --from=builder /app/build ./
+COPY ./httpd.dev.conf /usr/local/apache2/conf/httpd.conf
+RUN ls -la
+
+
+EXPOSE 80

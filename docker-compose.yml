@@ -1,14 +1,27 @@
 version: '3'
 services:
-  az-info:
-    container_name: az-info
-    build:
-      context: .
-      dockerfile: Dockerfile.local
-    volumes:
-      - ./app/src:/app/src
-      - /app/node_modules
+  # az-info:
+  #   container_name: az-info
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.local
+  #   volumes:
+  #     - ./app/src:/app/src
+  #     - /app/node_modules
+  #   ports:
+  #     - "8081:3000"
+  #   environment:
+  #     REACT_APP_STAGE: "local"
+  redis:
+    image: redis
+    container_name: cache
+    expose:
+      - 6379
+  rki-api:
+    image: marlon360/rki-covid-server:v2
     ports:
-      - "8081:3000"
+      - "8080:3000"
+    depends_on:
+      - redis
     environment:
-      REACT_APP_STAGE: "local"
+      - REDIS_URL=redis

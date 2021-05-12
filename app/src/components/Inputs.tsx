@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import Slider from '@material-ui/core/Slider';
 import { useTranslation } from 'react-i18next';
-import { FormControl, InputLabel, MenuItem, Select } from '@material-ui/core';
+import { FormControl, InputLabel, MenuItem, Select, TextField } from '@material-ui/core';
 import axios from 'axios';
 import _ from 'lodash';
+import environment from '../environment';
 
 export const ageGroups = [
   { title: '0 - 4', value: 0, apiValue: 'A00-A04' },
@@ -15,83 +16,91 @@ export const ageGroups = [
 ]
 
 const sexs = [
-  { title: 'Male', value: 'male' },
-  { title: 'Female', value: 'female' },
+  { title: 'Männlich', value: 'male' },
+  { title: 'Weiblich', value: 'female' },
 ]
 
 
-const Inputs = ({ageGroup, setAgeGroup, selectedState, setSelectedState, sex, setSex}: any) => {
+const Inputs = ({selectedAge, setSelectedAge, selectedState, setSelectedState, sex, setSex}: any) => {
 
   const { t } = useTranslation();
   const [states, setStates] = useState([] as any[])
 
 
   useEffect(() => {
-    axios.get('https://api.corona-zahlen.org/states').then((res) =>{
-      console.log(res);
+    axios.get(`${environment.dataAPIEndpoint}/states`).then((res) =>{
       setStates(_.values(res.data.data));
     });
   }, [])
 
   return (
-    <div className="bg-white overflow-hidden shadow flex-1 rounded-lg max-w-lg">
-      <div className="px-4 py-5 sm:p-6 space-y-10">
-        <h2>{t('Personal information')}</h2>
-        <div className="w-full grid grid-cols-3 gap-4 auto-cols-max">
+    <div className="bg-white overflow-hidden flex-1 rounded-lg max-w-lg">
+      <div className="px-4 py-5 sm:p-6 space-y-4">
+        <h2>{t('Deine Angaben')}</h2>
+        <p className="text-gray-600">{t('Gebe für deine persönliche Risikoabschätzung deine Daten ein. Alle Daten werden lokal verarbeitet.')}</p>
+        <div className="block w-full space-y-4">
 
-          <div>
-            {t('Age')}:
-          </div>
-          <div className="col-span-2">
-            <FormControl variant="outlined" className="w-full">
-              <InputLabel>{t('Age group')}</InputLabel>
+
+            {/* <FormControl variant="outlined" className="w-full">
+              <InputLabel>{t('Altersgruppe')}</InputLabel>
               <Select
-                value={ageGroup}
-                onChange={(event) => {setAgeGroup(event.target.value as any)}}
-                label={t('Age group')}
+                value={selectedAgeGroupIndex}
+                onChange={(event) => {setSelectedAgeGroupIndex(event.target.value as any)}}
+                label={t('Altersgruppe')}
               >
                 {ageGroups.map((ageGroup) => (
-                  <MenuItem value={ageGroup.value}>{ageGroup.title} {t('years')}</MenuItem>
+                  <MenuItem value={ageGroup.value}>{ageGroup.title} {t('Jahre')}</MenuItem>
                 ))}
               </Select>
-            </FormControl>
-          </div>
+            </FormControl> */}
+            {/* <FormControl variant="outlined" className="w-full">
+              <InputLabel>{t('Alter')}</InputLabel> */}
+              <TextField
+                className="w-full"
+                variant="outlined"
+                required
+                value={selectedAge}
+                onChange={(event) => {
+                  const v = parseInt(event.target.value, 10);
+                  setSelectedAge(v);
+                }}
+                onBlur={(event) => {
+                  const v = parseInt(event.target.value, 10);
+                  const min = Math.max(18, v);
+                  const max = Math.min(min, 80);
+                  setSelectedAge(max);
+                }}
+                label={t('Alter')}
+                InputProps={{ inputProps: { min: 18, max: 80 } }}
+                type="number"
+              />
+            {/* </FormControl> */}
 
-          <div>
-            {t('Sex')}:
-          </div>
-          <div className="col-span-2">
             <FormControl variant="outlined" className="w-full">
-              <InputLabel>{t('Sex')}</InputLabel>
+              <InputLabel>{t('Geschlecht')}</InputLabel>
               <Select
                 value={sex}
                 onChange={(event) => {setSex(event.target.value as any)}}
-                label={t('Sex')}
+                label={t('Geschlecht')}
               >
                 {sexs.map((sex) => (
                   <MenuItem value={sex.value}>{t(sex.title)}</MenuItem>
                 ))}
               </Select>
             </FormControl>
-          </div>
-
-          <div>
-            {t('State')}:
-          </div>
-          <div className="col-span-2">
             <FormControl variant="outlined" className="w-full">
-              <InputLabel>{t('State')}</InputLabel>
+              <InputLabel>{t('Bundesland')}</InputLabel>
               <Select
                 value={selectedState}
                 onChange={(event) => {setSelectedState(event.target.value as any)}}
-                label={t('State')}
+                label={t('Bundesland')}
               >
                 {states.map((state) => (
                   <MenuItem value={state.abbreviation}>{state.name}</MenuItem>
                 ))}
               </Select>
             </FormControl>
-          </div>
+
         </div>
       </div>
     </div>

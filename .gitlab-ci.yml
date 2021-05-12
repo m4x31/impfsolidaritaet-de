@@ -1,8 +1,8 @@
 image: docker:19.03.13
 
 variables:
-  ADMIN_FRONTEND_IMAGE_NAME: "admin-frontend"
-  ADMIN_FRONTEND_DEPLOYMENT: "deployment/admin-frontend"
+  IMAGE_NAME: "impfsolidaritaet-frontend"
+  DEPLOYMENT_NAME: "deployment/impfsolidaritaet-frontend"
   DOCKER_HOST: tcp://docker:2376
   DOCKER_TLS_CERTDIR: "/certs"
   DOCKER_TLS_VERIFY: 1
@@ -12,12 +12,11 @@ services:
   - docker:19.03.13-dind
 
 stages:
-  - build-staging
-  - deploy-staging
-  - build-and-publish-libs
+  - build-prod
+  - deploy-prod
 
-build-admin-frontend-staging:
-  stage: build-staging
+build-prod:
+  stage: build-prod
   script:
     - |
       for i in $(seq 1 30)
@@ -27,26 +26,19 @@ build-admin-frontend-staging:
           sleep 1s
       done
     - docker login $DOCKER_REGISTRY -u nologin -p $SCW_SECRET_TOKEN
-    - docker build -t $DOCKER_REGISTRY/staging/$ADMIN_FRONTEND_IMAGE_NAME:$CI_COMMIT_SHORT_SHA -t $DOCKER_REGISTRY/staging/$ADMIN_FRONTEND_IMAGE_NAME:latest -f Dockerfile.staging .
-    - docker push $DOCKER_REGISTRY/staging/$ADMIN_FRONTEND_IMAGE_NAME:$CI_COMMIT_SHORT_SHA
-    - docker push $DOCKER_REGISTRY/staging/$ADMIN_FRONTEND_IMAGE_NAME:latest
+    - docker build -t $DOCKER_REGISTRY/prod/$IMAGE_NAME:$CI_COMMIT_SHORT_SHA -t $DOCKER_REGISTRY/prod/$IMAGE_NAME:latest -f Dockerfile.prod .
+    - docker push $DOCKER_REGISTRY/prod/$IMAGE_NAME:$CI_COMMIT_SHORT_SHA
+    - docker push $DOCKER_REGISTRY/prod/$IMAGE_NAME:latest
 
-deploy-admin-frontend-staging:
+deploy-prod:
   image:
     name: bitnami/kubectl
     entrypoint: [""]
-  stage: deploy-staging
+  stage: deploy-prod
   tags:
     - docker
   environment: kubernetes
   dependencies:
-    - build-admin-frontend-staging
+    - build-prod
   script:
-    - kubectl set image $ADMIN_FRONTEND_DEPLOYMENT admin-frontend=$DOCKER_REGISTRY/staging/$ADMIN_FRONTEND_IMAGE_NAME:$CI_COMMIT_SHORT_SHA --record -n cc-staging
-
-# build-open-id-auth-lib:
-#   stage: build-and-publish-libs
-#   image: 14.16.1-alpine3.10
-#   when: manual
-#   script:
-#     - ./build.sh
+    - kubectl set image $DEPLOYMENT_NAME web=$DOCKER_REGISTRY/prod/$IMAGE_NAME:$CI_COMMIT_SHORT_SHA --record -n vaccine

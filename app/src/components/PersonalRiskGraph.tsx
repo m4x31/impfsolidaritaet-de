@@ -9,7 +9,7 @@ import { Chart, registerables } from 'chart.js';
 Chart.register(...registerables)
 
 
-const Stats = ({incidenceData, loading}: any) => {
+const PersonalRiskGraph = ({thrombosisRisk, infectionRisk, IRFRisk, deathRisk, loading}: any) => {
 
   const { t } = useTranslation();
 
@@ -18,30 +18,33 @@ const Stats = ({incidenceData, loading}: any) => {
 
 
   const buildOrUpdateChart = () => {
-    const history = incidenceData.history;
-    const dayIndidence = history.slice(Math.max(history.length - 20, 0))
-
     const datasets = [
       {
-        label: t('7-Tages-Inzidenz'),
-        data: dayIndidence.map((data: any) => data.weekIncidence),
+        label: t('Wahrscheinlichkeiten'),
+        data: [
+          deathRisk,
+          thrombosisRisk
+        ],
         fill: true,
         borderColor: '#2F6690',
+        backgroundColor: '#A4C7E1'
       },
     ]
 
-    const labels = dayIndidence.map((data: any) => {
-      return moment(data.date).format('DD.MM.yyyy')
-    });
+    const labels = [
+      t('Tod durch Corona'),
+      t('Enstehung Thrombose')
+    ]
 
     if (!chart) {
       const c = new Chart(canvas.current as any, {
-        type: 'line',
+        type: 'bar',
         data: {
           labels,
           datasets,
         },
         options: {
+          indexAxis: 'y',
           scales: {
             x: { beginAtZero: true },
             y: { beginAtZero: true }
@@ -56,11 +59,7 @@ const Stats = ({incidenceData, loading}: any) => {
     }
   }
 
-  useEffect(() => {
-    if (incidenceData) {
-      buildOrUpdateChart();
-    }
-  }, [incidenceData])
+  useEffect(buildOrUpdateChart, [thrombosisRisk, infectionRisk, IRFRisk, deathRisk])
 
   return (
     <div className="bg-white flex-1 overflow-hidden rounded-lg max-w-lg relative">
@@ -68,12 +67,12 @@ const Stats = ({incidenceData, loading}: any) => {
         <div className="absolute top-0 w-full"><LinearProgress /></div>
       )}
       <div className="px-4 py-5 sm:p-6 space-y-4">
-        <h2>{t('Aktuelles Infektionsgeschehen')}<sup>2</sup></h2>
-        <p className="text-gray-600">{t('Aktuelles Infektionsgeschehen in deinem Bundesland.')}</p>
+        <h2>{t('Risikovergleich')}</h2>
+        <p>{t('Wahrscheinlichkeit eine Thrombose durch eine Astrazeneca-Impfung zu entwickeln vs. Tod durch Corona. Beachte aber, dass nicht jede Thrombose zum Tod führt.')}</p>
         <canvas ref={canvas} height="200"></canvas>
       </div>
     </div>
   )
 }
 
-export default Stats;
+export default PersonalRiskGraph;

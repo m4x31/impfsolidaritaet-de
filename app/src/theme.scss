@@ -179,16 +179,16 @@ body {
   font-family: 'Poppins', sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  body {
-    background: #000;
-    color: #ffffff;
+// @media (prefers-color-scheme: dark) {
+//   body {
+//     background: #000;
+//     color: #ffffff;
 
-    --color-foreground: #1a1a1a;
+//     --color-foreground: #1a1a1a;
 
-    --input-background-color: #666;
+//     --input-background-color: #666;
 
-    font-family: 'Poppins', sans-serif;
-    --color-primary-1: #999;
-  }
-}
+//     font-family: 'Poppins', sans-serif;
+//     --color-primary-1: #999;
+//   }
+// }
