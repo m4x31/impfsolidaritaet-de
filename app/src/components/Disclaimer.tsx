@@ -16,11 +16,11 @@ const Disclaimer = () => {
           Es handelt sich um ein Spaß-Projekt von <a href="https://www.codecouture.io/">Code Couture</a>. Hier gehts zum <a href="https://www.codecouture.io/impressum">Impressum</a>.
         </p>
         <p>
-          Du hast einen Fehler gefunden? Sag gerne bescheid. Entweder <a href="https://www.codecouture.io/impressum#contact">mit unserem Kontaktformular</a>, oder <a href="https://twitter.com/maxengel">direkt auf Twitter</a>.
+          Du hast einen Fehler gefunden? Sag gerne bescheid. Entweder <a href="https://www.codecouture.io/impressum#contact">mit unserem Kontaktformular</a>, oder <a href="https://twitter.com/maxengel">direkt auf Twitter</a>. Wenn du programmieren kannst, stelle direkt einen Pull-Request auf <a href="https://github.com/m4x31/impfsolidaritaet-de">GitHub</a>.
         </p>
 
         <p>
-          Dieses Projekt wird auf GitHub veröffentlich sobald der Autor die Zeit dazu findet.
+          Dieses Projekt ist auf <a href="https://github.com/m4x31/impfsolidaritaet-de">GitHub</a> verfügbar.
         </p>
       </div>
     </>
